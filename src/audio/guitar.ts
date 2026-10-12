@@ -73,7 +73,15 @@ function guitarBus(ctx: AudioContext): AudioNode {
 
 const active = new Set<{ src: AudioBufferSourceNode; gain: GainNode }>();
 
-export function pluck(midi: number, opts: { when?: number; gain?: number; length?: number } = {}) {
+export interface PluckHandle {
+  /** Damp the note at `when` (e.g. the next note on the same string). */
+  stop: (when: number) => void;
+}
+
+export function pluck(
+  midi: number,
+  opts: { when?: number; gain?: number; length?: number; bend?: number; vibrato?: boolean } = {},
+): PluckHandle {
   const ctx = audio();
   let r = buffers.get(midi);
   if (!r) {
@@ -91,11 +99,34 @@ export function pluck(midi: number, opts: { when?: number; gain?: number; length
     gain.gain.setValueAtTime(level, when + opts.length);
     gain.gain.exponentialRampToValueAtTime(0.0001, when + opts.length + 0.12);
   }
+  if (opts.bend) {
+    // Pick, then push the string up to pitch.
+    src.playbackRate.setValueAtTime(r.rate, when + 0.04);
+    src.playbackRate.linearRampToValueAtTime(r.rate * Math.pow(2, opts.bend / 12), when + 0.22);
+  }
+  if (opts.vibrato) {
+    const lfo = ctx.createOscillator();
+    lfo.frequency.value = 5.5;
+    const depth = ctx.createGain();
+    depth.gain.setValueAtTime(0, when);
+    depth.gain.linearRampToValueAtTime(r.rate * 0.012, when + 0.45);
+    lfo.connect(depth).connect(src.playbackRate);
+    lfo.start(when);
+    lfo.stop(when + DURATION);
+  }
   src.connect(gain).connect(guitarBus(ctx));
   src.start(when);
   const handle = { src, gain };
   active.add(handle);
   src.onended = () => active.delete(handle);
+  return {
+    stop: (t: number) => {
+      if (!active.has(handle)) return;
+      gain.gain.setTargetAtTime(0, t, 0.02);
+      src.stop(t + 0.2);
+      active.delete(handle);
+    },
+  };
 }
 
 /** Damp everything still ringing at `when`, like a new strum muting the last one. */
@@ -175,4 +206,19 @@ export function playSequence<T>(
     timers.forEach(clearTimeout);
     silence();
   };
+}
+
+/** A short metronome-style tick, for count-ins and click tracks. */
+export function tick(when: number, accent = false) {
+  const ctx = audio();
+  const osc = ctx.createOscillator();
+  osc.type = 'triangle';
+  osc.frequency.value = accent ? 1800 : 1250;
+  const env = ctx.createGain();
+  env.gain.setValueAtTime(0, when);
+  env.gain.linearRampToValueAtTime(accent ? 0.5 : 0.3, when + 0.001);
+  env.gain.exponentialRampToValueAtTime(0.0001, when + 0.04);
+  osc.connect(env).connect(masterOut());
+  osc.start(when);
+  osc.stop(when + 0.05);
 }

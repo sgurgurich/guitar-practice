@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 
-export type Page = 'metronome' | 'circle' | 'chords' | 'scales' | 'tuner';
-export const PAGES: Page[] = ['metronome', 'circle', 'chords', 'scales', 'tuner'];
+export type Page = 'metronome' | 'circle' | 'chords' | 'scales' | 'riffs' | 'tuner' | 'log';
+export const PAGES: Page[] = ['metronome', 'circle', 'chords', 'scales', 'riffs', 'tuner', 'log'];
 
 /** useState backed by localStorage. Falls back silently when storage is unavailable. */
 export function useStored<T>(key: string, initial: T): [T, (v: T | ((prev: T) => T)) => void] {

@@ -1,8 +1,10 @@
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
-import { Disc3, Gauge, Grid3x3, Moon, Music, Square, Sun, Timer } from 'lucide-react';
+import { Disc3, Gauge, Grid3x3, Guitar, Moon, Music, NotebookPen, Square, Sun, Timer } from 'lucide-react';
 import type { ComponentType } from 'react';
 import CirclePage from './features/circle/CirclePage';
 import ChordsPage from './features/chords/ChordsPage';
+import LogPage, { formatClock, useTimerMs } from './features/log/LogPage';
+import RiffsPage from './features/riffs/RiffsPage';
 import { metronome, useMetronome } from './features/metronome/controller';
 import MetronomePage from './features/metronome/MetronomePage';
 import ScalesPage from './features/scales/ScalesPage';
@@ -14,7 +16,9 @@ const NAV: { id: Page; label: string; short: string; icon: ComponentType<{ size?
   { id: 'circle', label: 'Circle of Fifths', short: 'Keys', icon: Disc3, page: CirclePage },
   { id: 'chords', label: 'Chords', short: 'Chords', icon: Grid3x3, page: ChordsPage },
   { id: 'scales', label: 'Scales & Modes', short: 'Scales', icon: Music, page: ScalesPage },
+  { id: 'riffs', label: 'Riffs & Tabs', short: 'Riffs', icon: Guitar, page: RiffsPage },
   { id: 'tuner', label: 'Tuner', short: 'Tuner', icon: Gauge, page: TunerPage },
+  { id: 'log', label: 'Practice Log', short: 'Log', icon: NotebookPen, page: LogPage },
 ];
 
 export default function App() {
@@ -55,7 +59,10 @@ function Shell() {
           ))}
         </nav>
 
-        <MiniMetronome visible={page !== 'metronome'} onOpen={() => go('metronome')} />
+        <div className="mini-stack">
+          <MiniTimer visible={page !== 'log'} onOpen={() => go('log')} />
+          <MiniMetronome visible={page !== 'metronome'} onOpen={() => go('metronome')} />
+        </div>
 
         <div className="sidebar-foot">
           <span>Practice daily ✦</span>
@@ -112,6 +119,27 @@ function MiniMetronome({ visible, onOpen }: { visible: boolean; onOpen: () => vo
             <Square size={12} fill="currentColor" />
           </button>
         </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+function MiniTimer({ visible, onOpen }: { visible: boolean; onOpen: () => void }) {
+  const { ms, running } = useTimerMs();
+  return (
+    <AnimatePresence>
+      {running && visible && (
+        <motion.button
+          className="mini-timer"
+          onClick={onOpen}
+          initial={{ opacity: 0, y: 12, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 12, scale: 0.95 }}
+        >
+          <span className="mini-dot" />
+          <span className="mini-bpm">{formatClock(ms)}</span>
+          <small className="faint">practising</small>
+        </motion.button>
       )}
     </AnimatePresence>
   );

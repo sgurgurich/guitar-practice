@@ -331,3 +331,11 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
+
+.session {
+  align-items: center;
+}
+
+.log-run {
+  margin-left: auto;
+}

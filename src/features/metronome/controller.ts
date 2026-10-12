@@ -15,6 +15,8 @@ export interface MetronomeState {
   trainer: Trainer;
   running: boolean;
   startedAt: number | null;
+  /** The most recent finished run, so it can be logged after stopping. */
+  lastRun: { seconds: number; bpm: number } | null;
   /** Latest tick that has become audible. */
   tick: { beat: number; sub: number; bar: number; n: number } | null;
 }
@@ -47,7 +49,7 @@ export const clampBpm = (b: number) => Math.round(Math.min(BPM_MAX, Math.max(BPM
 export const ballPosition = motionValue(0);
 
 class Controller {
-  private state: MetronomeState = { ...load(), running: false, startedAt: null, tick: null };
+  private state: MetronomeState = { ...load(), running: false, startedAt: null, lastRun: null, tick: null };
   private engine: Metronome | null = null;
   private listeners = new Set<() => void>();
   private raf = 0;
@@ -126,7 +128,14 @@ class Controller {
     this.engine?.stop();
     cancelAnimationFrame(this.raf);
     ballPosition.set(0);
-    this.set({ running: false, startedAt: null, tick: null });
+    const { startedAt, settings } = this.state;
+    const seconds = startedAt ? (Date.now() - startedAt) / 1000 : 0;
+    this.set({
+      running: false,
+      startedAt: null,
+      tick: null,
+      lastRun: seconds >= 30 ? { seconds, bpm: settings.bpm } : this.state.lastRun,
+    });
   }
 
   toggle = () => (this.state.running ? this.stop() : this.start());

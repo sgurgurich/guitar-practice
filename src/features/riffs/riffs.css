@@ -1,0 +1,370 @@
+.riff-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+}
+
+.search {
+  flex: 1 1 220px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 11px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-3);
+}
+
+.search:focus-within {
+  box-shadow: var(--ring);
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  outline: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+}
+
+.riff-count {
+  margin: 14px 4px;
+  font-size: 13px;
+}
+
+.riff-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.riff {
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.riff.playing {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow);
+}
+
+.riff-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.riff-head h2 {
+  font-size: 21px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.riff-meta {
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.riff-meta .chip {
+  font-size: 12px;
+  padding: 2px 9px;
+  color: var(--text-2);
+}
+
+.chip.yours {
+  font-family: var(--font);
+  font-size: 11px;
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.difficulty {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pips {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.pips i {
+  width: 7px;
+  height: 14px;
+  border-radius: 3px;
+  background: var(--surface-3);
+}
+
+.pips i.on {
+  background: var(--accent);
+}
+
+.riff-play {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--accent-grad);
+  color: var(--accent-ink);
+  box-shadow: 0 8px 22px -10px rgba(255, 110, 50, 0.8);
+}
+
+.riff-play.on {
+  background: var(--surface-3);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+
+.riff-desc {
+  margin: 12px 0 14px;
+  font-size: 14px;
+}
+
+/* Tab */
+.tab {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px 12px;
+}
+
+.tab-grid {
+  display: flex;
+  width: max-content;
+  font-family: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 13.5px;
+}
+
+.tab-col {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tab-cursor {
+  position: absolute;
+  inset: 16px 0 -2px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.tab-anno {
+  position: relative;
+  height: 18px;
+  font-family: var(--font);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-3);
+  line-height: 18px;
+  letter-spacing: 0.02em;
+}
+
+.tab-cell {
+  position: relative;
+  height: 21px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab-cell::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: 1px solid var(--text-3);
+  opacity: 0.45;
+}
+
+.tab-cell b {
+  position: relative;
+  padding: 0 1px;
+  background: var(--surface-2);
+  font-weight: 650;
+  color: var(--text);
+  transition: color 0.12s;
+}
+
+.tab-col.on .tab-cell b {
+  color: var(--accent);
+  background: transparent;
+}
+
+.tab-names .tab-cell {
+  width: 1.6ch;
+  color: var(--text-3);
+  font-weight: 600;
+}
+
+.tab-names .tab-cell::before {
+  display: none;
+}
+
+/* Spans from the high-e line to the low-E line: annotation row + half a cell, five cells tall. */
+.tab-bar {
+  width: 1px;
+  margin: calc(18px + 10.5px) 3px 0;
+  height: calc(21px * 5 + 1px);
+  background: color-mix(in srgb, var(--text-3) 70%, transparent);
+  align-self: flex-start;
+  flex-shrink: 0;
+}
+
+.tab-bar.end {
+  width: 3px;
+  border-radius: 2px;
+}
+
+.tab-legend {
+  display: inline;
+  margin: 0;
+  font-size: 12px;
+}
+
+.tab-legend b {
+  font-family: ui-monospace, monospace;
+  color: var(--text-2);
+}
+
+.tab-raw {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+/* Controls */
+.riff-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.riff-tempo {
+  flex: 1 1 280px;
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.riff-bpm {
+  min-width: 62px;
+  font-weight: 650;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.riff-goal {
+  font-size: 12px;
+  white-space: nowrap;
+  color: var(--text-3);
+}
+
+.riff-goal.met {
+  color: var(--good);
+  font-weight: 600;
+}
+
+.riff-tips {
+  margin: 14px 0 0;
+  padding: 0 0 0 20px;
+  overflow: hidden;
+  color: var(--text-2);
+  font-size: 14px;
+}
+
+.riff-tips li {
+  margin: 4px 0;
+}
+
+.btn.danger {
+  color: var(--bad);
+  border-color: color-mix(in srgb, var(--bad) 45%, transparent);
+}
+
+.empty {
+  text-align: center;
+  margin: 0;
+}
+
+/* Form */
+.add-tab {
+  margin-bottom: 20px;
+}
+
+.add-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+.field.full {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 640px) {
+  .add-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.input {
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 11px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  resize: vertical;
+}
+
+.input:focus {
+  box-shadow: var(--ring);
+}
+
+.input.mono {
+  font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.45;
+}

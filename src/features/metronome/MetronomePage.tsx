@@ -1,8 +1,10 @@
 import { AnimatePresence, motion, useTransform } from 'motion/react';
-import { Minus, Pause, Play, Plus, TrendingUp, Volume2 } from 'lucide-react';
+import { Minus, NotebookPen, Pause, Play, Plus, TrendingUp, Volume2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Range, Segmented, Switch } from '../../components/controls';
 import type { Accent } from '../../audio/metronome';
+import { useApp } from '../../state';
+import { formatMinutes, practiceLog } from '../log/store';
 import { BPM_MAX, BPM_MIN, ballPosition, metronome, tempoName, useMetronome } from './controller';
 import './metronome.css';
 
@@ -335,7 +337,8 @@ function TrainerCard() {
 }
 
 function SessionCard() {
-  const { running, startedAt, tick } = useMetronome();
+  const { running, startedAt, tick, lastRun, settings } = useMetronome();
+  const { go } = useApp();
   const [now, setNow] = useState(Date.now());
   useEffect(() => {
     if (!running) return;
@@ -355,6 +358,22 @@ function SessionCard() {
         <div className="session-val">{running && tick ? tick.bar + 1 : 0}</div>
         <div className="faint">Bar</div>
       </div>
+      {(secs >= 30 || lastRun) && (
+        <button
+          className="btn btn-sm log-run"
+          onClick={() => {
+            const seconds = secs >= 30 ? secs : lastRun!.seconds;
+            practiceLog.setDraft({
+              minutes: Math.max(1, Math.round(seconds / 60)),
+              focus: ['Rhythm'],
+              bpm: secs >= 30 ? settings.bpm : lastRun!.bpm,
+            });
+            go('log');
+          }}
+        >
+          <NotebookPen size={13} /> Log {formatMinutes(Math.max(1, Math.round((secs >= 30 ? secs : lastRun!.seconds) / 60)))}
+        </button>
+      )}
     </section>
   );
 }
