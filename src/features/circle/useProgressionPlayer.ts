@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { playSequence, strum } from '../../audio/guitar';
 import type { ChordType } from '../../theory/chords';
-import { defaultVoicing } from '../../theory/voicings';
+import { chosenVoicing } from '../../theory/voicingChoice';
 
 export interface PlayableChord {
   rootPc: number;
@@ -23,7 +23,7 @@ export function useProgressionPlayer() {
     (id: string, chords: PlayableChord[], opts: { bpm: number; beatsPerChord: number; loop: boolean }) => {
       cancel.current?.();
       const beats = chords.flatMap((c, ci) => {
-        const midis = defaultVoicing(c.rootPc, c.type)?.midis ?? [];
+        const midis = chosenVoicing(c.rootPc, c.type)?.midis ?? [];
         return Array.from({ length: opts.beatsPerChord }, (_, b) => ({ ci, b, midis }));
       });
       // Down on every beat, with a lighter up-strum between beats 2–3 and 3–4.
@@ -70,6 +70,6 @@ export function useProgressionPlayer() {
 }
 
 export function playChord(rootPc: number, type: ChordType) {
-  const v = defaultVoicing(rootPc, type);
+  const v = chosenVoicing(rootPc, type);
   if (v) strum(v.midis, { choke: true });
 }

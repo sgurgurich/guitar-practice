@@ -490,3 +490,34 @@
   color: var(--text-3);
   white-space: nowrap;
 }
+
+.chord-peek-diagram {
+  overflow: hidden;
+}
+
+.chord-peek-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2px 4px;
+  padding: 2px 0 6px;
+  font-size: 11.5px;
+  color: var(--text-2);
+}
+
+.chord-peek-foot b {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.chord-peek-foot svg {
+  color: var(--text-3);
+}
+
+.chord-peek-foot small {
+  flex-basis: 100%;
+  text-align: center;
+  font-size: 10.5px;
+  color: var(--text-3);
+}
