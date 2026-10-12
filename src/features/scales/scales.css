@@ -1,0 +1,186 @@
+.scale-group {
+  grid-template-columns: 150px 1fr;
+}
+
+.scale-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 20px;
+  margin: 20px 0;
+  align-items: stretch;
+}
+
+@media (max-width: 1020px) {
+  .scale-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scale-info {
+  overflow: hidden;
+}
+
+.scale-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.scale-title h2 {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.scale-char {
+  margin: 12px 0 4px;
+  font-size: 16px;
+  max-width: 60ch;
+}
+
+.scale-usage {
+  margin: 0;
+  font-size: 14px;
+}
+
+.scale-parent {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.link {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  text-underline-offset: 3px;
+}
+
+.formula-note.sig {
+  box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--c);
+}
+
+.sig-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 0;
+  font-size: 12px;
+}
+
+.sig-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--text-2);
+  flex-shrink: 0;
+}
+
+/* Mode ladder */
+.ladder-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ladder-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 54px 92px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.ladder-row:hover {
+  background: var(--surface-2);
+}
+
+.ladder-row > * {
+  position: relative;
+  z-index: 1;
+}
+
+.ladder-pill {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 10px;
+  background: var(--surface-3);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+
+.ladder-bar {
+  height: 6px;
+  border-radius: 6px;
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.ladder-fill {
+  display: block;
+  height: 100%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #6b7cff, #ffcf5a);
+}
+
+.ladder-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.ladder-row.current .ladder-name {
+  color: var(--accent);
+}
+
+.ladder-formula {
+  display: flex;
+  gap: 6px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-3);
+}
+
+.ladder-formula span {
+  min-width: 16px;
+}
+
+.ladder-formula .alt {
+  color: var(--deg-seventh);
+  font-weight: 700;
+}
+
+.ladder-hint {
+  margin: 12px 0 0;
+  font-size: 12px;
+}
+
+@media (max-width: 480px) {
+  .ladder-row {
+    grid-template-columns: 30px 84px 1fr;
+    gap: 8px;
+  }
+  .ladder-formula {
+    gap: 3px;
+  }
+}
+
+/* Fretboard card */
+.fret-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.sev-name {
+  font-size: 12px;
+  font-weight: 500;
+}

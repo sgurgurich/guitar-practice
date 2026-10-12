@@ -1,0 +1,265 @@
+.type-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.type-group {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.type-group-label {
+  font-size: 13px;
+  color: var(--text-3);
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .type-group {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+.type-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.type-chip {
+  position: relative;
+  min-width: 48px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  font-weight: 600;
+  font-size: 14px;
+  transition: border-color 0.15s, color 0.2s;
+}
+
+.type-chip:hover {
+  border-color: var(--border-strong);
+}
+
+.type-chip[aria-pressed='true'] {
+  color: var(--accent-ink);
+  border-color: transparent;
+}
+
+.type-chip > span:last-child {
+  position: relative;
+  z-index: 1;
+}
+
+.type-pill {
+  position: absolute;
+  inset: -1px;
+  border-radius: 10px;
+  background: var(--accent-grad);
+}
+
+/* Hero */
+.chord-hero {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin: 28px 4px 20px;
+}
+
+.chord-hero-name {
+  min-width: 180px;
+}
+
+.chord-hero-name h2 {
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.chord-hero-name p {
+  margin: 6px 0 0;
+  font-size: 14px;
+}
+
+.formula {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.formula-note {
+  position: relative;
+  min-width: 58px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--c) 14%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--c) 45%, transparent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.fn-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.fn-deg {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--c);
+}
+
+.fn-opt {
+  position: absolute;
+  top: -7px;
+  right: -6px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 6px;
+  background: var(--surface-3);
+  color: var(--text-3);
+}
+
+/* Voicings */
+.voicing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.voicing {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 10px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  transition: border-color 0.2s, box-shadow 0.25s, background 0.2s;
+  box-shadow: var(--shadow);
+}
+
+.voicing:hover {
+  border-color: var(--border-strong);
+}
+
+.voicing.selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow);
+}
+
+.voicing-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0 4px;
+}
+
+.voicing-head .faint {
+  font-weight: 500;
+  font-size: 11px;
+  font-family: ui-monospace, monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chord-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cd-nut {
+  fill: var(--text);
+}
+
+.cd-base {
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--text-2);
+  text-anchor: end;
+}
+
+.cd-fret {
+  stroke: var(--border-strong);
+  stroke-width: 1.2;
+}
+
+.cd-string {
+  stroke: var(--text-3);
+  stroke-width: 1;
+}
+
+.cd-mute {
+  font-size: 13px;
+  fill: var(--text-3);
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.cd-open {
+  fill: none;
+  stroke-width: 1.8;
+}
+
+.cd-barre {
+  fill: color-mix(in srgb, var(--text) 22%, transparent);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.cd-dot {
+  stroke: rgba(0, 0, 0, 0.3);
+  stroke-width: 0.8;
+}
+
+.cd-dot.root {
+  stroke: #fff;
+  stroke-width: 1.8;
+}
+
+.cd-label {
+  font-size: 9px;
+  font-weight: 800;
+  fill: #14110e;
+  text-anchor: middle;
+}
+
+.cd-label.small {
+  font-size: 7px;
+}
+
+.cd-foot {
+  font-size: 8.5px;
+  font-weight: 600;
+  fill: var(--text-3);
+  text-anchor: middle;
+}
+
+.fn-bass {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.empty-voicings {
+  margin: 0;
+  text-align: center;
+}

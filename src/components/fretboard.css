@@ -1,0 +1,93 @@
+.fretboard {
+  margin: 0 -4px;
+  padding: 0 4px;
+}
+
+.fretboard-svg {
+  display: block;
+  width: 100%;
+  min-width: 820px;
+  height: auto;
+  user-select: none;
+}
+
+.fb-inlay {
+  fill: rgba(255, 255, 255, 0.13);
+}
+
+.fb-nut {
+  fill: #e9e2d0;
+}
+
+.fb-fret {
+  stroke: var(--fret-wire);
+  stroke-width: 2.2;
+}
+
+.fb-string {
+  stroke: var(--string);
+  opacity: 0.75;
+}
+
+.fb-num {
+  fill: var(--text-3);
+  font-size: 12px;
+  font-weight: 500;
+  text-anchor: middle;
+}
+
+.fb-num.strong {
+  fill: var(--text-2);
+  font-weight: 700;
+}
+
+.fb-hit {
+  fill: transparent;
+  cursor: pointer;
+}
+
+.fb-hit:hover {
+  fill: rgba(255, 255, 255, 0.04);
+}
+
+.fb-mark {
+  pointer-events: none;
+}
+
+.fb-dot {
+  transition: fill 0.35s var(--ease);
+  stroke: rgba(0, 0, 0, 0.35);
+  stroke-width: 1;
+}
+
+.fb-dot.root {
+  stroke: #fff;
+  stroke-width: 2.5;
+}
+
+.fb-glow {
+  opacity: 0.35;
+  filter: blur(4px);
+}
+
+.fb-label {
+  fill: #12100d;
+  font-size: 11.5px;
+  font-weight: 750;
+  text-anchor: middle;
+  letter-spacing: -0.02em;
+}
+
+.fb-window {
+  fill: rgba(255, 255, 255, 0.035);
+  stroke: var(--accent);
+  stroke-opacity: 0.55;
+  stroke-width: 1.5;
+  stroke-dasharray: 5 5;
+}
+
+.fb-ring {
+  fill: none;
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+}

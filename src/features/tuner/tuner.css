@@ -1,0 +1,260 @@
+.tuner-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 24px 28px;
+  transition: box-shadow 0.4s var(--ease), border-color 0.4s;
+}
+
+.tuner-card.good {
+  border-color: color-mix(in srgb, var(--good) 50%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--good) 14%, transparent), 0 20px 60px -20px color-mix(in srgb, var(--good) 45%, transparent);
+}
+
+.gauge {
+  position: relative;
+  width: min(520px, 100%);
+}
+
+.gauge-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.gauge-track {
+  fill: none;
+  stroke: var(--surface-3);
+  stroke-width: 14;
+  stroke-linecap: round;
+}
+
+.gauge-color {
+  fill: none;
+  stroke-width: 4;
+  stroke-linecap: round;
+  opacity: 0.85;
+  transform: translateY(0);
+}
+
+.gauge-tick {
+  stroke: var(--text-3);
+  stroke-width: 1.2;
+}
+
+.gauge-tick.major {
+  stroke: var(--text-2);
+  stroke-width: 2;
+}
+
+.gauge-num {
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--text-3);
+  text-anchor: middle;
+}
+
+.needle {
+  stroke: var(--text);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke 0.3s;
+}
+
+.good .needle {
+  stroke: var(--good);
+}
+
+.close .needle {
+  stroke: var(--warn);
+}
+
+.off .needle {
+  stroke: var(--bad);
+}
+
+.needle-hub {
+  fill: var(--surface-3);
+  stroke: var(--text);
+  stroke-width: 2.5;
+}
+
+.tuner-readout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -4px;
+  min-height: 132px;
+}
+
+.tuner-note {
+  font-family: var(--font-display);
+  font-size: 84px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  transition: color 0.3s;
+}
+
+.tuner-note sub {
+  font-size: 0.32em;
+  color: var(--text-3);
+  margin-left: 4px;
+  letter-spacing: 0;
+}
+
+.good .tuner-note {
+  color: var(--good);
+}
+
+.tuner-sub {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  margin-top: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cents {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.tuner-hint {
+  margin-top: 6px;
+  min-height: 22px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.good .tuner-hint {
+  color: var(--good);
+}
+
+.close .tuner-hint {
+  color: var(--warn);
+}
+
+.off .tuner-hint {
+  color: var(--bad);
+}
+
+.tuner-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.mic-btn {
+  height: 46px;
+  padding: 0 22px;
+  border-radius: 14px;
+}
+
+.level {
+  width: 160px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.level span {
+  display: block;
+  height: 100%;
+  background: var(--good);
+}
+
+.tuner-error {
+  margin: 14px 0 0;
+  color: var(--bad);
+  font-size: 14px;
+  text-align: center;
+}
+
+.a4 {
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.a4 b {
+  min-width: 56px;
+  text-align: center;
+  color: var(--text);
+}
+
+.strings {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 560px) {
+  .strings {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.string-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 8px 18px;
+  border-radius: 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: border-color 0.25s, background 0.25s;
+}
+
+.string-btn:hover {
+  border-color: var(--border-strong);
+}
+
+.string-btn.near {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface-2));
+}
+
+.string-btn.good {
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 14%, var(--surface-2));
+}
+
+.string-num {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+
+.string-note {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.string-note sub {
+  font-size: 0.45em;
+  color: var(--text-3);
+}
+
+.string-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8px;
+  background: var(--string);
+  opacity: 0.6;
+}
