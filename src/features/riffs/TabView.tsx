@@ -22,9 +22,17 @@ export const TabView = memo(function TabView({ id, items, active, palmMute }: Pr
     const box = scroller.current;
     const col = box?.querySelector<HTMLElement>('.tab-col.on');
     if (!box || !col) return;
-    const left = col.offsetLeft;
-    if (left < box.scrollLeft + 40 || left > box.scrollLeft + box.clientWidth - 60) {
-      box.scrollTo({ left: Math.max(0, left - box.clientWidth / 3), behavior: 'smooth' });
+    // Measure within the scrolled content. (offsetLeft is relative to <body> here, which made it scroll early.)
+    const colRect = col.getBoundingClientRect();
+    const left = colRect.left - box.getBoundingClientRect().left + box.scrollLeft;
+    const right = left + colRect.width;
+    const viewLeft = box.scrollLeft;
+    const viewRight = viewLeft + box.clientWidth;
+    // Only move once the cursor reaches the right edge (or loops back out of view on the left),
+    // then bring it to a quarter of the way in so there's plenty of read-ahead.
+    if (left < viewLeft || right > viewRight - 32) {
+      const target = Math.min(box.scrollWidth - box.clientWidth, Math.max(0, left - box.clientWidth / 4));
+      if (Math.abs(target - viewLeft) > 1) box.scrollTo({ left: target, behavior: 'smooth' });
     }
   }, [active]);
 
