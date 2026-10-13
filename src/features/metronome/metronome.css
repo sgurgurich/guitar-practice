@@ -339,3 +339,8 @@
 .log-run {
   margin-left: auto;
 }
+
+.metro-main > .tempo-bumps {
+  justify-content: center;
+  margin-top: -8px;
+}

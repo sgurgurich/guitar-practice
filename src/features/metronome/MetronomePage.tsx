@@ -1,7 +1,7 @@
 import { AnimatePresence, motion, useTransform } from 'motion/react';
 import { Minus, NotebookPen, Pause, Play, Plus, TrendingUp, Volume2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { Range, Segmented, Switch } from '../../components/controls';
+import { Range, Segmented, Switch, TempoBumps } from '../../components/controls';
 import type { Accent } from '../../audio/metronome';
 import { useApp } from '../../state';
 import { formatMinutes, practiceLog } from '../log/store';
@@ -50,13 +50,15 @@ export default function MetronomePage() {
               <Plus size={18} />
             </motion.button>
           </div>
+          {/* Goal follows the speed trainer's "Up to" tempo. */}
+          <TempoBumps value={settings.bpm} max={BPM_MAX} goal={m.trainer.target} onChange={(bpm) => metronome.update({ bpm })} />
           <div className="metro-actions">
             <TapButton />
             <PlayButton running={m.running} />
             <div className="bpm-jumps">
-              {[-10, +10].map((d) => (
-                <button key={d} className="btn btn-sm" onClick={() => metronome.update({ bpm: settings.bpm + d })}>
-                  {d > 0 ? `+${d}` : d}
+              {[-5, -10].map((d) => (
+                <button key={d} className="btn btn-sm" aria-label={`Slower by ${-d} bpm`} onClick={() => metronome.update({ bpm: settings.bpm + d })}>
+                  {d}
                 </button>
               ))}
             </div>
