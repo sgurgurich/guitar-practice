@@ -2,7 +2,7 @@ import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
 import { ArrowUpRight, Play, Plus, Repeat, Square, Trash2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useChordPeek } from '../../components/ChordPeek';
-import { Range, Segmented, Switch } from '../../components/controls';
+import { Range, Segmented, Switch, TempoBumps } from '../../components/controls';
 import { ToneToggle } from '../../components/ToneToggle';
 import { useApp, useStored } from '../../state';
 import { PROGRESSIONS, getKey, resolveStep, type KeyMode, type ProgStep, type ResolvedStep, type Ring } from '../../theory/keys';
@@ -252,6 +252,7 @@ export default function CirclePage() {
               <div style={{ width: 110 }}>
                 <Range label="Playback tempo" value={s.bpm} min={50} max={180} onChange={(bpm) => patch({ bpm })} />
               </div>
+              <TempoBumps value={s.bpm} max={180} onChange={(bpm) => patch({ bpm })} />
               <button
                 className={`btn btn-sm btn-icon ${s.loop ? 'on' : ''}`}
                 title="Loop"

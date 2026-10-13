@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { ChevronRight, NotebookPen, Play, Plus, Repeat, Search, Square, Timer, Trash2, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { Range, Segmented } from '../../components/controls';
+import { Range, Segmented, TempoBumps } from '../../components/controls';
 import { ToneToggle } from '../../components/ToneToggle';
 import { useApp, useStored } from '../../state';
 import { parseTab } from '../../theory/tab';
@@ -255,11 +255,14 @@ function RiffCard({
       <TabView id={riff.id} items={items} active={playing ? player.state!.item : null} palmMute={riff.palmMute} tuning={riff.tuning?.notes} />
 
       <div className="riff-controls">
-        <div className="riff-tempo">
-          <Timer size={15} className="faint" />
-          <span className="riff-bpm">{bpm} bpm</span>
-          <Range label="Tempo" value={bpm} min={30} max={riff.targetBpm + 30} onChange={setBpm} />
-          <span className={`riff-goal ${bpm >= riff.targetBpm ? 'met' : ''}`}>goal {riff.targetBpm}</span>
+        <div className="tempo-line">
+          <div className="riff-tempo">
+            <Timer size={15} className="faint" />
+            <span className="riff-bpm">{bpm} bpm</span>
+            <Range label="Tempo" value={bpm} min={30} max={riff.targetBpm + 30} onChange={setBpm} />
+            <span className={`riff-goal ${bpm >= riff.targetBpm ? 'met' : ''}`}>goal {riff.targetBpm}</span>
+          </div>
+          <TempoBumps value={bpm} max={riff.targetBpm + 30} goal={riff.targetBpm} onChange={setBpm} />
         </div>
         <div className="row" style={{ gap: 6 }}>
           <button className={`btn btn-sm ${opts.loop ? 'on' : ''}`} aria-pressed={opts.loop} onClick={() => toggleOpt('loop')}>

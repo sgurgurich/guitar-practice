@@ -854,3 +854,20 @@ input[type='range']:active::-webkit-slider-thumb {
 .sidebar-tone + .sidebar-foot {
   margin-top: 0;
 }
+
+.tempo-bumps {
+  display: inline-flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.tempo-bumps .btn-sm {
+  min-width: 34px;
+  padding: 0 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.tempo-bumps .goal-btn.on {
+  color: var(--good);
+  border-color: color-mix(in srgb, var(--good) 50%, transparent);
+}

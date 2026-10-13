@@ -120,6 +120,46 @@ export function Range({
   );
 }
 
+/** Quick tempo bumps (+1 / +2 / +5 / +10) and an optional jump to a goal tempo. */
+export function TempoBumps({
+  value,
+  max,
+  goal,
+  onChange,
+}: {
+  value: number;
+  max: number;
+  goal?: number;
+  onChange: (bpm: number) => void;
+}) {
+  return (
+    <div className="tempo-bumps" role="group" aria-label="Increase tempo">
+      {[1, 2, 5, 10].map((d) => (
+        <motion.button
+          key={d}
+          whileTap={{ scale: 0.88 }}
+          className="btn btn-sm"
+          disabled={value >= max}
+          onClick={() => onChange(Math.min(max, value + d))}
+          aria-label={`Faster by ${d} bpm`}
+        >
+          +{d}
+        </motion.button>
+      ))}
+      {goal !== undefined && (
+        <motion.button
+          whileTap={{ scale: 0.88 }}
+          className={`btn btn-sm goal-btn ${value === goal ? 'on' : ''}`}
+          onClick={() => onChange(goal)}
+          title={`Jump to the goal tempo (${goal} bpm)`}
+        >
+          Goal
+        </motion.button>
+      )}
+    </div>
+  );
+}
+
 export const degColor = (id: string) => `var(--deg-${degreeRole(id)})`;
 
 export function IntervalLegend({ degrees }: { degrees: string[] }) {
