@@ -3,6 +3,7 @@ import { ArrowUpRight, Play, Plus, Repeat, Square, Trash2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useChordPeek } from '../../components/ChordPeek';
 import { Range, Segmented, Switch } from '../../components/controls';
+import { ToneToggle } from '../../components/ToneToggle';
 import { useApp, useStored } from '../../state';
 import { PROGRESSIONS, getKey, resolveStep, type KeyMode, type ProgStep, type ResolvedStep, type Ring } from '../../theory/keys';
 import { mod, noteName, notePc } from '../../theory/notes';
@@ -246,6 +247,7 @@ export default function CirclePage() {
           <h3 className="card-title">
             Common progressions in {noteName(key.tonic)} {s.mode}
             <div className="row prog-settings">
+              <ToneToggle compact />
               <span className="faint">{s.bpm} bpm</span>
               <div style={{ width: 110 }}>
                 <Range label="Playback tempo" value={s.bpm} min={50} max={180} onChange={(bpm) => patch({ bpm })} />

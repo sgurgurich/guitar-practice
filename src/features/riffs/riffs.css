@@ -368,3 +368,13 @@
   font-size: 13px;
   line-height: 1.45;
 }
+
+.riff-meta .chip.genre {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.riff-meta .chip.tuning {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+}

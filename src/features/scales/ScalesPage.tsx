@@ -3,6 +3,7 @@ import { ArrowUpRight, Play, Square } from 'lucide-react';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Fretboard, type FretMark } from '../../components/Fretboard';
 import { IntervalLegend, RootPicker, Segmented, degColor } from '../../components/controls';
+import { ToneToggle } from '../../components/ToneToggle';
 import { pluck, playSequence } from '../../audio/guitar';
 import { useApp, useStored } from '../../state';
 import { harmonize } from '../../theory/harmonize';
@@ -241,6 +242,7 @@ export default function ScalesPage() {
               ]}
               onChange={(frets) => setView({ ...view, frets })}
             />
+            <ToneToggle compact />
           </div>
           <Segmented
             label="Position"

@@ -1,9 +1,16 @@
 import { motion } from 'motion/react';
 import { memo, useEffect, useRef } from 'react';
+import { STANDARD_TUNING, midiName } from '../../theory/notes';
 import type { TabItem } from '../../theory/tab';
 
-const ROWS = [5, 4, 3, 2, 1, 0]; // high e on top, like printed tab
-const ROW_NAMES = ['e', 'B', 'G', 'D', 'A', 'E'];
+const ROWS = [5, 4, 3, 2, 1, 0]; // high string on top, like printed tab
+
+/** String names, high → low; the top string is lower-case by tab convention (e B G D A E). */
+function rowNames(tuning: number[]) {
+  const names = ROWS.map((s) => midiName(tuning[s]));
+  names[0] = names[0].toLowerCase();
+  return names;
+}
 
 interface Props {
   id: string;
@@ -11,9 +18,10 @@ interface Props {
   active: number | null;
   /** Show "PM" over every step (riffs that are palm-muted throughout). */
   palmMute?: boolean;
+  tuning?: number[];
 }
 
-export const TabView = memo(function TabView({ id, items, active, palmMute }: Props) {
+export const TabView = memo(function TabView({ id, items, active, palmMute, tuning = STANDARD_TUNING }: Props) {
   const scroller = useRef<HTMLDivElement>(null);
   const hasUps = items.some((it) => it.kind === 'step' && it.up);
 
@@ -41,8 +49,8 @@ export const TabView = memo(function TabView({ id, items, active, palmMute }: Pr
       <div className="tab-grid">
         <div className="tab-col tab-names">
           <span className="tab-anno" />
-          {ROW_NAMES.map((n) => (
-            <span key={n} className="tab-cell">
+          {rowNames(tuning).map((n, i) => (
+            <span key={i} className="tab-cell">
               {n}
             </span>
           ))}

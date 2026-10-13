@@ -18,6 +18,11 @@ describe('tab notation', () => {
 });
 
 describe('riff library', () => {
+  it('has unique ids and a good spread of difficulty', () => {
+    expect(new Set(RIFFS.map((r) => r.id)).size).toBe(RIFFS.length);
+    for (const d of [1, 2, 3, 4, 5]) expect(RIFFS.filter((r) => r.difficulty === d).length).toBeGreaterThanOrEqual(4);
+  });
+
   it.each(RIFFS.map((r) => [r.id, r] as const))('%s is well-formed', (_, r) => {
     const items = parseTab(r.tab, r.chords);
     for (const len of barLengths(items)) expect(len).toBe(4 * r.perBeat);
@@ -31,7 +36,9 @@ describe('riff library', () => {
     const notes = parseTab(r.tab, r.chords).flatMap((it) => (it.kind === 'step' ? it.notes : []));
     for (const n of notes) {
       // A bend is judged by the pitch it reaches.
-      const midi = n.bendTo !== undefined ? STANDARD_TUNING[n.string] + n.bendTo : noteMidi(n, STANDARD_TUNING)!;
+      const tuning = r.tuning?.notes ?? STANDARD_TUNING;
+      if (n.fret === null) continue; // dead notes have no pitch
+      const midi = n.bendTo !== undefined ? tuning[n.string] + n.bendTo : noteMidi(n, tuning)!;
       expect(pcs, `${id} ${n.label}`).toContain(mod(midi));
     }
   };
@@ -45,5 +52,20 @@ describe('riff library', () => {
     inScale('bend-to-pitch', [9, 11, 0, 2, 4, 5, 7]); // A natural minor: the half-step bend is E→F
     inScale('blues-phrases', [...A_MINOR_PENT, 3]);
     inScale('three-nps-major', [7, 9, 11, 0, 2, 4, 6]);
+    const E_MINOR_PENT = [4, 7, 9, 11, 2];
+    const A_MINOR = [9, 11, 0, 2, 4, 5, 7];
+    for (const id of ['arena-bend-lick', 'double-stop-shuffle', 'repeating-bend-lick', 'unison-bends', 'sweet-spot-box', 'vibrato-builder'])
+      inScale(id, A_MINOR_PENT);
+    inScale('open-e-hard-rock', E_MINOR_PENT);
+    inScale('funk-single-note', E_MINOR_PENT);
+    inScale('octave-melody', [4, 6, 7, 9, 11, 0, 2]);
+    inScale('legato-run', A_MINOR);
+    inScale('neoclassical-run', [9, 11, 0, 2, 4, 5, 8]);
+    inScale('chicken-pickin', [7, 9, 11, 2, 4]);
+    inScale('ode-to-joy', [0, 2, 4, 5, 7, 9, 11]);
+    inScale('pima-arpeggio', [...A_MINOR, 8]);
+    inScale('indie-arpeggios', [7, 9, 11, 0, 2, 4, 6]);
+    inScale('boogie-bass-line', [9, 1, 4, 6, 7, 2, 11, 0]); // A then D: the C is D7's ♭7
+    inScale('pedal-point-shred', [9, 11, 0, 2, 4, 5, 8]);
   });
 });

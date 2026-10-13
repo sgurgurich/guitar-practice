@@ -1,5 +1,8 @@
 // Original riffs and exercises, each built to drill one or two techniques.
 
+import { MORE_RIFFS } from './riffs-more';
+import type { Tuning } from './tunings';
+
 export type Difficulty = 1 | 2 | 3 | 4 | 5;
 
 export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
@@ -10,10 +13,19 @@ export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
   5: 'Expert',
 };
 
+export const GENRES = [
+  'Exercise', 'Rock', 'Metal', 'Punk', 'Blues', 'Funk', 'Country', 'Bluegrass', 'Jazz',
+  'Neo-soul', 'Reggae', 'Surf', 'Indie', 'Folk', 'Classical', 'Shred',
+] as const;
+export type Genre = (typeof GENRES)[number];
+
 export interface Riff {
   id: string;
   title: string;
   difficulty: Difficulty;
+  genre: Genre;
+  /** Standard tuning when omitted. */
+  tuning?: Tuning;
   techniques: string[];
   description: string;
   tips: string[];
@@ -38,11 +50,12 @@ const POWER = {
   C5: 'E8+A10+D10',
 };
 
-export const RIFFS: Riff[] = [
+const BASE_RIFFS: Riff[] = [
   {
     id: 'spider-walk',
     title: 'Spider Walk',
     difficulty: 1,
+    genre: 'Exercise',
     techniques: ['Warm-up', 'Alternate picking', 'Finger independence'],
     description: 'The classic 1-2-3-4 chromatic warm-up, up across all six strings and back down.',
     tips: [
@@ -60,6 +73,7 @@ export const RIFFS: Riff[] = [
     id: 'open-chord-changes',
     title: 'Campfire Changes',
     difficulty: 1,
+    genre: 'Folk',
     techniques: ['Chords', 'Strumming', 'Rhythm'],
     description: 'G – C – Em – D with the go-to down, down-up, up-down-up strum pattern.',
     tips: [
@@ -82,6 +96,7 @@ export const RIFFS: Riff[] = [
     id: 'boogie-shuffle',
     title: 'Twelve-Bar Boogie in A',
     difficulty: 1,
+    genre: 'Blues',
     techniques: ['Blues', 'Rhythm', 'Palm muting'],
     description: 'The traditional shuffle boogie over a full 12-bar blues — I, IV and V.',
     tips: [
@@ -103,6 +118,7 @@ export const RIFFS: Riff[] = [
     id: 'garage-power',
     title: 'Garage Power Riff',
     difficulty: 2,
+    genre: 'Rock',
     techniques: ['Power chords', 'Palm muting', 'Rock'],
     description: 'Chugging open E with power-chord stabs — the backbone of rock rhythm playing.',
     tips: [
@@ -120,6 +136,7 @@ export const RIFFS: Riff[] = [
     id: 'legato-pentatonic',
     title: 'Hammer & Pull Workout',
     difficulty: 2,
+    genre: 'Exercise',
     techniques: ['Legato', 'Pentatonic'],
     description: 'Hammer-ons and pull-offs through the A minor pentatonic box, string by string.',
     tips: [
@@ -136,6 +153,7 @@ export const RIFFS: Riff[] = [
     id: 'bend-to-pitch',
     title: 'Bend to Pitch',
     difficulty: 2,
+    genre: 'Exercise',
     techniques: ['Bending', 'Vibrato', 'Ear training'],
     description: 'Play the target note, then bend up to match it exactly — whole steps and half steps.',
     tips: [
@@ -152,6 +170,7 @@ export const RIFFS: Riff[] = [
     id: 'slide-shifts',
     title: 'Sliding Between Boxes',
     difficulty: 2,
+    genre: 'Rock',
     techniques: ['Slides', 'Position shifts', 'Pentatonic'],
     description: 'Use slides to travel between A minor pentatonic positions instead of staying stuck in one box.',
     tips: [
@@ -168,6 +187,7 @@ export const RIFFS: Riff[] = [
     id: 'natural-harmonics',
     title: 'Bell Tones',
     difficulty: 2,
+    genre: 'Exercise',
     techniques: ['Harmonics'],
     description: 'Natural harmonics at the 12th, 7th and 5th frets — chime-like and great for tuning by ear.',
     tips: [
@@ -184,6 +204,7 @@ export const RIFFS: Riff[] = [
     id: 'travis-picking',
     title: 'Travis Picking Pattern',
     difficulty: 3,
+    genre: 'Folk',
     techniques: ['Fingerstyle', 'Travis picking'],
     description: 'Alternating thumb bass with melody on top, over C – G – Am – C/G.',
     tips: [
@@ -200,6 +221,7 @@ export const RIFFS: Riff[] = [
     id: 'pentatonic-threes',
     title: 'Pentatonic in Threes',
     difficulty: 3,
+    genre: 'Exercise',
     techniques: ['Alternate picking', 'Sequences', 'Pentatonic'],
     description: 'A minor pentatonic in overlapping groups of three, played as triplets.',
     tips: [
@@ -216,6 +238,7 @@ export const RIFFS: Riff[] = [
     id: 'metal-gallop',
     title: 'Galloping Thunder',
     difficulty: 3,
+    genre: 'Metal',
     techniques: ['Palm muting', 'Metal', 'Rhythm'],
     description: 'The eighth-plus-two-sixteenths "gallop" on a muted low E, with power-chord hits.',
     tips: [
@@ -233,6 +256,7 @@ export const RIFFS: Riff[] = [
     id: 'funk-sixteenths',
     title: 'Funk Scratch',
     difficulty: 3,
+    genre: 'Funk',
     techniques: ['Funk', 'Muting', 'Strumming'],
     description: 'Sixteenth-note strumming on an E9, mixing chord stabs with muted "chk" scratches.',
     tips: [
@@ -251,6 +275,7 @@ export const RIFFS: Riff[] = [
     id: 'blues-phrases',
     title: 'Blues Phrase Toolkit',
     difficulty: 3,
+    genre: 'Blues',
     techniques: ['Blues', 'Bending', 'Vibrato', 'Phrasing'],
     description: 'Four bars of A blues vocabulary: a bend, a resolution, a blue-note run and a vibrato ending.',
     tips: [
@@ -268,6 +293,7 @@ export const RIFFS: Riff[] = [
     id: 'three-nps-major',
     title: 'Three-Notes-Per-String G Major',
     difficulty: 4,
+    genre: 'Exercise',
     techniques: ['Alternate picking', 'Scales', 'Speed'],
     description: 'G major up and down in the three-notes-per-string pattern, in triplets so each string gets one beat.',
     tips: [
@@ -284,6 +310,7 @@ export const RIFFS: Riff[] = [
     id: 'sweep-arpeggios',
     title: 'Sweep Arpeggios',
     difficulty: 4,
+    genre: 'Shred',
     techniques: ['Sweep picking', 'Arpeggios'],
     description: 'Three-string sweeps over Am – F – C – G, finishing with a five-string Am sweep.',
     tips: [
@@ -300,6 +327,7 @@ export const RIFFS: Riff[] = [
     id: 'tapping-triplets',
     title: 'Tapping Triplets',
     difficulty: 4,
+    genre: 'Shred',
     techniques: ['Tapping', 'Legato'],
     description: 'Two-hand tapping on the high E: tap, pull off, hammer on — outlining Am, F, C and E.',
     tips: [
@@ -317,6 +345,7 @@ export const RIFFS: Riff[] = [
     id: 'pentatonic-cascade',
     title: 'Pentatonic Cascade',
     difficulty: 5,
+    genre: 'Shred',
     techniques: ['Speed', 'Alternate picking', 'Pentatonic'],
     description: 'Six-note groups cascading down then up the A minor pentatonic box, as sextuplets.',
     tips: [
@@ -334,6 +363,7 @@ export const RIFFS: Riff[] = [
     id: 'string-skipping',
     title: 'String-Skipping Arpeggios',
     difficulty: 5,
+    genre: 'Shred',
     techniques: ['String skipping', 'Arpeggios'],
     description: 'Wide-interval arpeggios over Am – F – G – Am, skipping the G string for a big, open sound.',
     tips: [
@@ -347,3 +377,5 @@ export const RIFFS: Riff[] = [
     tab: `A12 D14 B13 e17 B13 D14 A8 D10 B10 e13 B10 D10 | A10 D12 B12 e15 B12 D12 A12 D14 B13 e17 B13 D14`,
   },
 ];
+
+export const RIFFS: Riff[] = [...BASE_RIFFS, ...MORE_RIFFS];

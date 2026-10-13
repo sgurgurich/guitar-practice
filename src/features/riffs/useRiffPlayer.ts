@@ -38,6 +38,7 @@ export function useRiffPlayer() {
       inBar++;
     });
 
+    const tuning = riff.tuning?.notes ?? STANDARD_TUNING;
     const ringing: (PluckHandle | undefined)[] = [];
     cancel.current = playSequence(
       events,
@@ -49,10 +50,10 @@ export function useRiffPlayer() {
         notes.forEach((n, i) => {
           const t = when + (isChord ? i * 0.011 : 0);
           ringing[n.string]?.stop(t);
-          const midi = noteMidi(n, STANDARD_TUNING);
+          const midi = noteMidi(n, tuning);
           if (midi === null) {
             // Dead note: a short percussive "chk".
-            ringing[n.string] = pluck(STANDARD_TUNING[n.string] + 5, { when: t, gain: 0.22, length: 0.015 });
+            ringing[n.string] = pluck(tuning[n.string] + 5, { when: t, gain: 0.22, length: 0.015 });
             return;
           }
           const legato = n.hammer || n.pull || n.slide;

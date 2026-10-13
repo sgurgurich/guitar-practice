@@ -816,3 +816,41 @@ input[type='range']:active::-webkit-slider-thumb {
     background: var(--surface);
   }
 }
+
+.tone-opt {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sidebar-tone {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 4px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+.sidebar-tone .seg {
+  width: 100%;
+}
+
+.sidebar-tone .seg-btn {
+  flex: 1;
+  padding: 6px 4px;
+}
+
+@media (max-width: 860px) {
+  .sidebar-tone {
+    display: none;
+  }
+}
+
+.sidebar-tone {
+  margin-top: auto;
+}
+
+.sidebar-tone + .sidebar-foot {
+  margin-top: 0;
+}

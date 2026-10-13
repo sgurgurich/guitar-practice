@@ -2,10 +2,11 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ChevronRight, NotebookPen, Play, Plus, Repeat, Search, Square, Timer, Trash2, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Range, Segmented } from '../../components/controls';
+import { ToneToggle } from '../../components/ToneToggle';
 import { useApp, useStored } from '../../state';
 import { parseTab } from '../../theory/tab';
 import { practiceLog } from '../log/store';
-import { DIFFICULTY_LABELS, RIFFS, type Difficulty, type Riff } from './riffs';
+import { DIFFICULTY_LABELS, GENRES, RIFFS, type Difficulty, type Riff } from './riffs';
 import { TabLegend, TabView } from './TabView';
 import { useRiffPlayer } from './useRiffPlayer';
 import './riffs.css';
@@ -34,6 +35,7 @@ export default function RiffsPage() {
   const [sort, setSort] = useStored<Sort>('riffs-sort', 'easy');
   const [level, setLevel] = useStored<number>('riffs-level', 0);
   const [technique, setTechnique] = useStored<string>('riffs-technique', '');
+  const [genre, setGenre] = useStored<string>('riffs-genre', '');
   const [query, setQuery] = useState('');
   const [custom, setCustom] = useStored<CustomTab[]>('custom-tabs', []);
   const [adding, setAdding] = useState(false);
@@ -51,13 +53,20 @@ export default function RiffsPage() {
     return all
       .filter((e) => !level || entryDifficulty(e) === level)
       .filter((e) => !technique || entryTechniques(e).includes(technique))
-      .filter((e) => !q || entryTitle(e).toLowerCase().includes(q) || entryTechniques(e).some((t) => t.toLowerCase().includes(q)))
+      .filter((e) => !genre || (e.kind === 'riff' && e.riff.genre === genre))
+      .filter(
+        (e) =>
+          !q ||
+          entryTitle(e).toLowerCase().includes(q) ||
+          entryTechniques(e).some((t) => t.toLowerCase().includes(q)) ||
+          (e.kind === 'riff' && e.riff.genre.toLowerCase().includes(q)),
+      )
       .sort((a, b) => {
         if (sort === 'az') return entryTitle(a).localeCompare(entryTitle(b));
         const d = entryDifficulty(a) - entryDifficulty(b);
         return (sort === 'easy' ? d : -d) || entryTitle(a).localeCompare(entryTitle(b));
       });
-  }, [custom, level, technique, query, sort]);
+  }, [custom, level, technique, genre, query, sort]);
 
   const techniques = useMemo(() => [...new Set([...ALL_TECHNIQUES, ...custom.flatMap((c) => c.techniques)])].sort(), [custom]);
 
@@ -96,6 +105,14 @@ export default function RiffsPage() {
           <Search size={15} />
           <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search riffs or techniques" aria-label="Search" />
         </label>
+        <select className="select" value={genre} onChange={(e) => setGenre(e.target.value)} aria-label="Genre">
+          <option value="">All genres</option>
+          {GENRES.filter((g) => RIFFS.some((r) => r.genre === g)).map((g) => (
+            <option key={g} value={g}>
+              {g}
+            </option>
+          ))}
+        </select>
         <select className="select" value={technique} onChange={(e) => setTechnique(e.target.value)} aria-label="Technique">
           <option value="">All techniques</option>
           {techniques.map((t) => (
@@ -120,6 +137,7 @@ export default function RiffsPage() {
           ]}
           onChange={setSort}
         />
+        <ToneToggle />
       </section>
 
       <p className="faint riff-count">
@@ -214,6 +232,8 @@ function RiffCard({
           <h2>{riff.title}</h2>
           <div className="row riff-meta">
             <DifficultyMeter level={riff.difficulty} />
+            <span className="chip genre">{riff.genre}</span>
+            {riff.tuning && <span className="chip tuning">{riff.tuning.name} tuning</span>}
             {riff.techniques.map((t) => (
               <span key={t} className="chip">
                 {t}
@@ -232,7 +252,7 @@ function RiffCard({
       </div>
       <p className="muted riff-desc">{riff.description}</p>
 
-      <TabView id={riff.id} items={items} active={playing ? player.state!.item : null} palmMute={riff.palmMute} />
+      <TabView id={riff.id} items={items} active={playing ? player.state!.item : null} palmMute={riff.palmMute} tuning={riff.tuning?.notes} />
 
       <div className="riff-controls">
         <div className="riff-tempo">

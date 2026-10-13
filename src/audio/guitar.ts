@@ -1,4 +1,5 @@
 import { audio, masterOut } from './context';
+import { AMP_PRESETS, TONES, makeAmp, type Tone } from './amp';
 import { midiToFreq } from '../theory/notes';
 
 // Karplus–Strong plucked string. Each note is rendered once into a buffer and cached.
@@ -11,7 +12,7 @@ interface Rendered {
 const DURATION = 3;
 const buffers = new Map<number, Rendered>();
 
-function render(ctx: AudioContext, midi: number): Rendered {
+export function render(ctx: BaseAudioContext, midi: number): Rendered {
   const sr = ctx.sampleRate;
   const freq = midiToFreq(midi);
   // The two-point averaging filter adds half a sample of delay.
@@ -49,6 +50,40 @@ function render(ctx: AudioContext, midi: number): Rendered {
   return { buffer, rate: freq / actual };
 }
 
+// ── Tone (clean / rock / metal), shared by everything that plays guitar ──
+
+const TONE_KEY = 'woodshed:tone';
+let tone: Tone = (() => {
+  try {
+    const t = JSON.parse(localStorage.getItem(TONE_KEY) ?? '"clean"');
+    return TONES.includes(t) ? t : 'clean';
+  } catch {
+    return 'clean';
+  }
+})();
+const toneListeners = new Set<() => void>();
+let toneGains: Record<Tone, GainNode> | null = null;
+
+export const getTone = () => tone;
+export const subscribeTone = (fn: () => void) => {
+  toneListeners.add(fn);
+  return () => toneListeners.delete(fn);
+};
+
+export function setTone(next: Tone) {
+  tone = next;
+  try {
+    localStorage.setItem(TONE_KEY, JSON.stringify(next));
+  } catch {
+    /* ignore */
+  }
+  if (toneGains) {
+    const t = audio().currentTime;
+    for (const k of TONES) toneGains[k].gain.setTargetAtTime(k === next ? 1 : 0, t, 0.015);
+  }
+  toneListeners.forEach((l) => l());
+}
+
 let bus: AudioNode | null = null;
 function guitarBus(ctx: AudioContext): AudioNode {
   if (!bus) {
@@ -65,7 +100,24 @@ function guitarBus(ctx: AudioContext): AudioNode {
     const lp = ctx.createBiquadFilter();
     lp.type = 'lowpass';
     lp.frequency.value = 6000;
-    body.connect(presence).connect(lp).connect(masterOut());
+    body.connect(presence).connect(lp);
+
+    // Every tone path stays connected; switching just crossfades their gains.
+    const out = masterOut();
+    const gains = {} as Record<Tone, GainNode>;
+    for (const k of TONES) {
+      const g = ctx.createGain();
+      g.gain.value = k === tone ? 1 : 0;
+      gains[k] = g;
+      if (k === 'clean') lp.connect(g);
+      else {
+        const amp = makeAmp(ctx, AMP_PRESETS[k]);
+        lp.connect(amp.input);
+        amp.output.connect(g);
+      }
+      g.connect(out);
+    }
+    toneGains = gains;
     bus = body;
   }
   return bus;

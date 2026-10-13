@@ -1,6 +1,7 @@
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import { Disc3, Gauge, Grid3x3, Guitar, Moon, Music, NotebookPen, Square, Sun, Timer } from 'lucide-react';
 import type { ComponentType } from 'react';
+import { ToneToggle } from './components/ToneToggle';
 import CirclePage from './features/circle/CirclePage';
 import ChordsPage from './features/chords/ChordsPage';
 import LogPage, { formatClock, useTimerMs } from './features/log/LogPage';
@@ -62,6 +63,11 @@ function Shell() {
         <div className="mini-stack">
           <MiniTimer visible={page !== 'log'} onOpen={() => go('log')} />
           <MiniMetronome visible={page !== 'metronome'} onOpen={() => go('metronome')} />
+        </div>
+
+        <div className="sidebar-tone">
+          <span>Guitar tone</span>
+          <ToneToggle />
         </div>
 
         <div className="sidebar-foot">

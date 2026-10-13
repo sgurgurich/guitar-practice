@@ -4,6 +4,7 @@ import { useEffect, useId, useMemo, useState } from 'react';
 import { ChordDiagram, type DiagramLabel } from '../../components/ChordDiagram';
 import { Fretboard, type FretMark } from '../../components/Fretboard';
 import { IntervalLegend, RootPicker, Segmented, degColor } from '../../components/controls';
+import { ToneToggle } from '../../components/ToneToggle';
 import { audio } from '../../audio/context';
 import { pluck, strum } from '../../audio/guitar';
 import { useApp, useStored } from '../../state';
@@ -188,6 +189,7 @@ export default function ChordsPage() {
           <button className="btn" onClick={arpeggiate} title="Play the notes one at a time">
             <Music2 size={15} /> Arpeggio
           </button>
+          <ToneToggle compact />
         </div>
       </section>
 
